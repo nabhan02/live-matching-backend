@@ -100,10 +100,12 @@ def get_participants():
     """Get all participants with their unique links"""
     participants = get_all_participants()
     
-    # Add full URL for each participant - pointing to frontend
-    frontend_url = 'http://localhost:5173'
-    for participant in participants:
-        participant['link'] = f"{frontend_url}/select/{participant['unique_token']}"
+    # Get frontend URL from environment variable, fallback to localhost for development
+    frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+    
+    # Add full link to each participant
+    for p in participants:
+        p['link'] = f"{frontend_url}/participant/{p['unique_token']}"
     
     return jsonify(participants)
 
